@@ -4,6 +4,8 @@ Free as in freedom, yet another distributed media converter
 
 This is a simple system to queue in media conversion, e.g. video to mkv, in a network where neither server nor client are always online.
 You just put in a task to convert and ask if the job is done.
+At the beginning, we will juse php with the build in webserver and a basic framework.
+We will put it to `/srv/webapps/net_bazzline/distributed_media_converter".
 
 # Thoughts
 
@@ -145,6 +147,7 @@ Server can also reject an item (disk full, not supported conversion)
   ],
   "list_of_servers": [
     "hostname_or_ip_address": {
+      "port": <int>,
       "list_of_supported_media_types": [
         "audio",
         "image",
@@ -157,12 +160,13 @@ Server can also reject an item (disk full, not supported conversion)
 ## Server Configuration File
 
 ```json
-"number_of_conversion_threads": <int>,
 "list_of_supported_media_types": [
   "audio",
   "image",
   "video"
-]
+],
+"listen_on_port": <int>,
+"number_of_conversion_threads": <int>
 ```
 
 # Milestones
@@ -226,3 +230,6 @@ Server can also reject an item (disk full, not supported conversion)
 * add option to organize server per task
 * replace json "databases" with sqlite or more
 * extend client code to observe file paths to automate requesting conversion
+* add support for apache webserver instead of interla php server
+* add authentication for client and server
+* think about rewriting it in RUST
