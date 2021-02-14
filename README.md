@@ -26,8 +26,7 @@ Server can also reject an item (disk full, not supported conversion)
       "item_id": <string>,
       "created_at": <date>,
       "status": <string>,
-      "last_checked_at": <date>,
-      "version": int
+      "last_checked_at": <date>
     }
   ]
 }
@@ -43,8 +42,7 @@ Server can also reject an item (disk full, not supported conversion)
   "file_name": <string>,
   "sha512_checksum": <string>
   "file_size": <string>,
-  "status": <string>,
-  "version": int
+  "status": <string>
 }
 ```
 
@@ -73,8 +71,7 @@ Server can also reject an item (disk full, not supported conversion)
       "original_file_name": <string>,
       "current_file_name": <string>,
       "sha512_checksum": <string>
-      "file_size": <string>,
-      "version": int
+      "file_size": <string>
   },
   "in_progress": [
     <uuid: item_id>: {
@@ -84,8 +81,7 @@ Server can also reject an item (disk full, not supported conversion)
       "original_file_name": <string>,
       "current_file_name": <string>,
       "sha512_checksum": <string>
-      "file_size": <string>,
-      "version": int
+      "file_size": <string>
   },
   "finished_successful": [
     <uuid: item_id>: {
@@ -94,8 +90,7 @@ Server can also reject an item (disk full, not supported conversion)
       "original_file_name": <string>,
       "current_file_name": <string>,
       "sha512_checksum": <string>
-      "file_size": <string>,
-      "version": int
+      "file_size": <string>
   },
   "finished_with_errors": [
     <uuid: item_id>: {
@@ -106,8 +101,7 @@ Server can also reject an item (disk full, not supported conversion)
       "file_size": <string>,
       "errors": [
         <string>
-      ],
-      "version": int
+      ]
     },
   ]
 }
@@ -120,8 +114,7 @@ Server can also reject an item (disk full, not supported conversion)
   <int: process_id>: {
     "pid": <int>,
     "started_at": <date>,
-    "item_id": <string>,
-    "version": int
+    "item_id": <string>
   }
 }
 ```
@@ -167,6 +160,22 @@ Server can also reject an item (disk full, not supported conversion)
 ],
 "listen_on_port": <int>,
 "number_of_conversion_threads": <int>
+```
+
+## Server Endpoints
+
+```
+#return all existing entries per client id
+GET /api/v1/item/{client_id}
+
+#return existing entry status
+GET /api/v1/item/{client_id}/{item_id}
+
+#create new entry
+POST /api/v1/item
+
+#delete existing entry
+DELETE /api/v1/item/{client_id}/{item_id}
 ```
 
 # Milestones
@@ -233,3 +242,19 @@ Server can also reject an item (disk full, not supported conversion)
 * add support for apache webserver instead of interla php server
 * add authentication for client and server
 * think about rewriting it in RUST
+
+# Deck
+
+## Open
+
+* Should we use [Symfony 5](https://symfony.com/5)?
+    * [Rest API init](https://nafaa-azaiez.medium.com/symfony-5-rest-api-init-f2a24add17e1)?
+    * [Documentation](https://symfony.com/doc/current/index.html)
+# Can we use [stratigility](https://github.com/laminas/laminas-stratigility)?
+
+## Closed
+
+# link
+
+* [Build a Simple REST API in PHP ](https://developer.okta.com/blog/2019/03/08/simple-rest-api-php) - 20190308
+* [How To Create A Simple REST API in PHP? Step By Step Guide!](https://codeofaninja.com/2017/02/create-simple-rest-api-in-php.html) - 20200629
