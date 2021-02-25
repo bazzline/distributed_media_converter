@@ -180,6 +180,10 @@ DELETE /api/v1/item/{client_id}/{item_id}
 
 # Milestones
 
+## 0.0.0
+
+* create some basic examples
+
 ## 0.0.1
 
 * basic server api with endpoints to
