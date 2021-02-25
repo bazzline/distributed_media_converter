@@ -132,7 +132,7 @@ function create_list ()
         local WORKING_DIRECTORY=$(realpath ${WORKING_DIRECTORY})
     fi
 
-    echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[jJ][pP][gG]\" -type f > \"${PATH_TO_THE_LIST}\""
+    #echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[jJ][pP][gG]\" -type f > \"${PATH_TO_THE_LIST}\""
     find "${WORKING_DIRECTORY}" -iname "*.[jJ][pP][gG]" -type f > "${PATH_TO_THE_LIST}"
 
     local NUMBER_OF_ENTRIES=$(cat "${PATH_TO_THE_LIST}" | wc -l)
