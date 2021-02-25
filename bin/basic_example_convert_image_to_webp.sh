@@ -158,10 +158,10 @@ function process_list ()
     local NUMBER_OF_CONVERTED_ENTRIES=0
     local PATH_TO_THE_LIST="${1}"
 
+    echo ":: Processing list."
+
     while read FILE_PATH;
     do
-        echo ":: Processing list."
-
         if [[ -f ${FILE_PATH} ]];
         then
             #${FILE_PATH:0:-4} returns the file path without the dot and the file extension. It is expected that the dot and the
