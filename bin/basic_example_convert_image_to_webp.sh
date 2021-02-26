@@ -190,7 +190,7 @@ function process_list ()
                 echo "   >>${NEW_FILE_PATH}<< exists already."
             else
                 #echo "convert ${FILE_PATH} -verbose -quality ${IMAGE_QUALITY} -comment \"made with linux and love\" \"${FILE_PATH:0:-4}.webp\""
-                convert ${FILE_PATH} -verbose -quality ${IMAGE_QUALITY} -comment "made with linux and love" "${FILE_PATH:0:-4}.webp"
+                convert "${FILE_PATH}" -verbose -quality ${IMAGE_QUALITY} -comment "made with linux and love" "${FILE_PATH:0:-4}.webp"
 
                 NUMBER_OF_CONVERTED_ENTRIES=$((NUMBER_OF_CONVERTED_ENTRIES+1))
             fi
