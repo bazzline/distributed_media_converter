@@ -133,6 +133,10 @@ function create_list ()
     fi
 
     #echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[jJ][pP][gG]\" -type f > \"${PATH_TO_THE_LIST}\""
+    #
+    #check if following is even better
+    #@see: https://stackoverflow.com/a/19009672
+    #find "${WORKING_DIRECTORY}" -type f -exec file {} \; | grep -o -P '^.+: \w+ image' > "${PATH_TO_THE_LIST}"
     find "${WORKING_DIRECTORY}" -iname "*.[jJ][pP][gG]" -type f > "${PATH_TO_THE_LIST}"
     find "${WORKING_DIRECTORY}" -iname "*.[pP][nN][gG]" -type f >> "${PATH_TO_THE_LIST}"
 
