@@ -165,6 +165,17 @@ function process_list ()
 
     echo ":: Processing list."
 
+    #possible improvement
+    #extend existing process file with the command to do (or create new one)
+    #run this file list in parallen
+    #@see: https://opensource.com/article/18/5/gnu-parallel
+    #parallel --jobs 6 < jobs2run
+    ####
+    #@todo
+    #   -> rewrite this function to be "generate_process_list"
+    #   -> write new run_process_list <string: path to the process list> <int: number of parallel process: 2>
+    #   -> in the main function, add support for providing number of parallel processes
+
     while read FILE_PATH;
     do
         if [[ -f ${FILE_PATH} ]];
