@@ -40,7 +40,7 @@ function cleanup ()
 
     echo ":: The file >>${PATH_TO_THE_LIST}<< contains >>${NUMBER_OF_ENTRIES}<<."
 
-    read -p ":: Remove each file from the list? [n/Y]" YES_OR_NO
+    read -p ":: Remove each file from the list? [N/y]" YES_OR_NO
 
     case ${YES_OR_NO} in
         [Yy]* )
@@ -66,9 +66,9 @@ function cleanup ()
 
         while read FILE_PATH;
         do
-            if [[ -f ${FILE_PATH} ]];
+            if [[ -f "${FILE_PATH}" ]];
             then
-                rm ${FILE_PATH}
+                rm "${FILE_PATH}"
             else
                 echo "   Skipping invalid file path."
                 echo "   >>${FILE_PATH}<<"
