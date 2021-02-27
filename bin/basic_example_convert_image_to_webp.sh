@@ -11,7 +11,7 @@
 # Askes the user if we should remove each file in the process list file.
 # Askes the user if the process list file should be removed
 ####
-# @param: <string> PATH_TO_THE_LIST
+# @param: <string> PATH_TO_THE_FILE_LIST
 ####
 # @since 2021-02-25
 # @author stev leibelt <artodeto@bazzline.net>
@@ -21,26 +21,37 @@ function cleanup ()
     if [[ $# -lt 1 ]];
     then
         echo ":: Invalid amount of arguments provided!"
-        echo "   cleanup <string: PATH_TO_THE_LIST>"
+        echo "   cleanup <string: PATH_TO_THE_FILE_LIST> <string: PATH_TO_THE_PROCESS_LIST>"
 
         return 1
     fi
 
-    local PATH_TO_THE_LIST="${1}"
+    local PATH_TO_THE_FILE_LIST="${1}"
+    local PATH_TO_THE_PROCESS_LIST="${2}"
 
-    if [[ ! -f "${PATH_TO_THE_LIST}" ]];
+    if [[ ! -f "${PATH_TO_THE_FILE_LIST}" ]];
     then
-        echo ":: Invalid path to the list provieded!"
-        echo "   >>${PATH_TO_THE_LIST}<< is not a file."
+        echo ":: Invalid path to the file list provieded!"
+        echo "   >>${PATH_TO_THE_FILE_LIST}<< is not a file."
 
         return 2
     fi
 
-    local NUMBER_OF_ENTRIES=$(cat "${PATH_TO_THE_LIST}" | wc -l)
+    if [[ ! -f "${PATH_TO_THE_PROCESS_LIST}" ]];
+    then
+        echo ":: Invalid path to the process list provieded!"
+        echo "   >>${PATH_TO_THE_PROCESS_LIST}<< is not a file."
 
-    echo ":: The file >>${PATH_TO_THE_LIST}<< contains >>${NUMBER_OF_ENTRIES}<<."
+        return 2
+    fi
 
-    read -p ":: Remove each file from the list? [N/y]" YES_OR_NO
+    local NUMBER_OF_FILE_LIST_ENTRIES=$(cat "${PATH_TO_THE_FILE_LIST}" | wc -l)
+    local NUMBER_OF_PROCESS_LIST_ENTRIES=$(cat "${PATH_TO_THE_PROCESS_LIST}" | wc -l)
+
+    echo ":: The file list >>${PATH_TO_THE_FILE_LIST}<< contains >>${NUMBER_OF_FILE_LIST_ENTRIES}<<."
+    echo ":: The process list >>${PATH_TO_THE_PROCESS_LIST}<< contains >>${NUMBER_OF_PROCESS_LIST_ENTRIES}<<."
+
+    read -p ":: Remove each file from the file list? [N/y]" YES_OR_NO
 
     case ${YES_OR_NO} in
         [Yy]* )
@@ -50,7 +61,7 @@ function cleanup ()
             ;;
     esac
 
-    read -p ":: Remove the list? [Y/n]" YES_OR_NO
+    read -p ":: Remove the lists? [Y/n]" YES_OR_NO
 
     case ${YES_OR_NO} in
         [Nn]* )
@@ -73,13 +84,15 @@ function cleanup ()
                 echo "   Skipping invalid file path."
                 echo "   >>${FILE_PATH}<<"
             fi
-        done < ${PATH_TO_THE_LIST}
+        done < ${PATH_TO_THE_FILE_LIST}
     fi
 
     if [[ ${REMOVE_LIST} -eq 1 ]];
     then
-        echo ":: Removing list."
-        rm "${PATH_TO_THE_LIST}"
+        echo ":: Removing file list."
+        rm "${PATH_TO_THE_FILE_LIST}"
+        echo ":: Removing process list."
+        rm "${PATH_TO_THE_PROCESS_LIST}"
     fi
 }
 
@@ -87,12 +100,12 @@ function cleanup ()
 # Creates a file list containing all jpg or png files.
 ####
 # [@param: <string> WORKING_DIRECTRY]
-# [@param: <string> PATH_TO_THE_LIST]
+# [@param: <string> PATH_TO_THE_FILE_LIST]
 ####
 # @since 2021-02-25
 # @author stev leibelt <artodeto@bazzline.net>
 ####
-function create_list ()
+function create_file_list ()
 {
     if [[ $# -gt 0 ]];
     then
@@ -103,9 +116,9 @@ function create_list ()
 
     if [[ $# -gt 1 ]];
     then
-        local PATH_TO_THE_LIST="${2}"
+        local PATH_TO_THE_FILE_LIST="${2}"
     else
-        local PATH_TO_THE_LIST="${WORKING_DIRECTORY}/files_to_process.txt"
+        local PATH_TO_THE_FILE_LIST="${WORKING_DIRECTORY}/files_to_process.txt"
     fi
 
     if [[ ! -d "${WORKING_DIRECTORY}" ]];
@@ -116,12 +129,12 @@ function create_list ()
         return 1
     fi
 
-    if [[ -f "${PATH_TO_THE_LIST}" ]];
+    if [[ -f "${PATH_TO_THE_FILE_LIST}" ]];
     then
         echo ":: Removing existing file."
-        echo "   >>${PATH_TO_THE_LIST}<<"
+        echo "   >>${PATH_TO_THE_FILE_LIST}<<"
 
-        rm "${PATH_TO_THE_LIST}"
+        rm "${PATH_TO_THE_FILE_LIST}"
     fi
 
     #we simple don't want to deal with files like >>./foo/bar.jpg<<
@@ -132,36 +145,38 @@ function create_list ()
         local WORKING_DIRECTORY=$(realpath ${WORKING_DIRECTORY})
     fi
 
-    #echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[jJ][pP][gG]\" -type f > \"${PATH_TO_THE_LIST}\""
+    #echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[jJ][pP][gG]\" -type f > \"${PATH_TO_THE_FILE_LIST}\""
     #
     #check if following is even better
     #@see: https://stackoverflow.com/a/19009672
-    #find "${WORKING_DIRECTORY}" -type f -exec file {} \; | grep -o -P '^.+: \w+ image' > "${PATH_TO_THE_LIST}"
-    find "${WORKING_DIRECTORY}" -iname "*.[jJ][pP][gG]" -type f > "${PATH_TO_THE_LIST}"
-    find "${WORKING_DIRECTORY}" -iname "*.[pP][nN][gG]" -type f >> "${PATH_TO_THE_LIST}"
+    #find "${WORKING_DIRECTORY}" -type f -exec file {} \; | grep -o -P '^.+: \w+ image' > "${PATH_TO_THE_FILE_LIST}"
+    find "${WORKING_DIRECTORY}" -iname "*.[jJ][pP][gG]" -type f > "${PATH_TO_THE_FILE_LIST}"
+    find "${WORKING_DIRECTORY}" -iname "*.[pP][nN][gG]" -type f >> "${PATH_TO_THE_FILE_LIST}"
 
-    local NUMBER_OF_ENTRIES=$(cat "${PATH_TO_THE_LIST}" | wc -l)
+    local NUMBER_OF_FILE_LIST_ENTRIES=$(cat "${PATH_TO_THE_FILE_LIST}" | wc -l)
 
-    echo ":: Added >>${NUMBER_OF_ENTRIES}<< lines to the file >>${PATH_TO_THE_LIST}<<."
+    echo ":: Added >>${NUMBER_OF_FILE_LIST_ENTRIES}<< lines to the file >>${PATH_TO_THE_FILE_LIST}<<."
 }
 
 ####
-# Reads the provided path to a list line by line and tries to convert each file to webp
+# Reads the provided path to a list line by line and creates another file with one action per line
 ####
-# @param: <string> PATH_TO_THE_LIST
+# @param: <string> PATH_TO_THE_FILE_LIST
+# @param: <string> PATH_TO_THE_PROCESS_LIST
 ####
-function process_list ()
+function create_process_list ()
 {
-    if [[ $# -lt 1 ]];
+    if [[ $# -lt 2 ]];
     then
         echo ":: Invalid amount of parameters provided"
-        echo "   process_list <path to the list>"
+        echo "   process_list <path to the file list> <path to the process list>"
     fi
 
     local IMAGE_QUALITY=80
     local NUMBER_OF_PROCESSED_ENTRIES=0
-    local NUMBER_OF_CONVERTED_ENTRIES=0
-    local PATH_TO_THE_LIST="${1}"
+    local NUMBER_OF_CREATED_ENTRIES=0
+    local PATH_TO_THE_FILE_LIST="${1}"
+    local PATH_TO_THE_PROCESS_LIST="${2}"
 
     echo ":: Processing list."
 
@@ -189,10 +204,10 @@ function process_list ()
                 echo "   Skipping file path."
                 echo "   >>${NEW_FILE_PATH}<< exists already."
             else
-                #echo "convert ${FILE_PATH} -verbose -quality ${IMAGE_QUALITY} -comment \"made with linux and love\" \"${FILE_PATH:0:-4}.webp\""
-                convert "${FILE_PATH}" -verbose -quality ${IMAGE_QUALITY} -comment "made with linux and love" "${FILE_PATH:0:-4}.webp"
+                echo "convert \"${FILE_PATH}\" -verbose -quality ${IMAGE_QUALITY} -comment \"made with linux and love\" \"${FILE_PATH:0:-4}.webp\"" >> "${PATH_TO_THE_PROCESS_LIST}"
+                #convert "${FILE_PATH}" -verbose -quality ${IMAGE_QUALITY} -comment "made with linux and love" "${FILE_PATH:0:-4}.webp"
 
-                NUMBER_OF_CONVERTED_ENTRIES=$((NUMBER_OF_CONVERTED_ENTRIES+1))
+                NUMBER_OF_CREATED_ENTRIES=$((NUMBER_OF_CREATED_ENTRIES+1))
             fi
         else
             echo "   Skipping invalid file path."
@@ -200,15 +215,34 @@ function process_list ()
         fi
 
         NUMBER_OF_PROCESSED_ENTRIES=$((NUMBER_OF_PROCESSED_ENTRIES+1))
-    done < ${PATH_TO_THE_LIST}
+    done < ${PATH_TO_THE_FILE_LIST}
 
-    echo ":: Processed >>${NUMBER_OF_PROCESSED_ENTRIES}<< entries, converted >>${NUMBER_OF_CONVERTED_ENTRIES}<< entries."
+    echo ":: Processed >>${NUMBER_OF_PROCESSED_ENTRIES}<< entries, created >>${NUMBER_OF_CREATED_ENTRIES}<< entries."
+}
+
+####
+# Runs the commands in the process list
+####
+# @param: <string> PATH_TO_THE_PROCESS_LIST
+# @param: <int> NUMBER_OF_PARALLEL_PROCESS
+####
+function execute_process_list ()
+{
+    if [[ ${NUMBER_OF_PARALLEL_PROCESS} -lt 2 ]];
+    then
+        echo ":: Skippin parallel processing."
+        /usr/bin/bash "${PATH_TO_THE_PROCESS_LIST}"
+    else
+        echo ":: Running >>${NUMBER_OF_PARALLEL_PROCESS}<< proceses in parallel."
+        /usr/bin/parallel --jobs ${NUMBER_OF_PARALLEL_PROCESS} < "${PATH_TO_THE_PROCESS_LIST}"
+    fi
 }
 
 ####
 # Does all the magic
 ####
-# [@param: <string> WORKING_DIRECTORY]
+# [@param: <string> WORKING_DIRECTORY=.]
+# [@param: <int> NUMBER_OF_PARALLEL_PROCESS=2]
 ####
 function basic_example()
 {
@@ -218,6 +252,17 @@ function basic_example()
         echo "   Could not find directory >>/usr/include/webp<<"
     fi
 
+    if [[ -f /usr/bin/parallel ]];
+    then
+        local NUMBER_OF_PARALLEL_PROCESS=${2:-2}
+    else
+        local NUMBER_OF_PARALLEL_PROCESS=1
+
+        echo ":: Parallel is not installed."
+        echo "   >>/usr/bin/parallel<< is missing."
+        echo "   Parallel processing is disabled."
+    fi
+
     if [[ $# -gt 0 ]];
     then
         local WORKING_DIRECTORY="${1}"
@@ -225,11 +270,13 @@ function basic_example()
         local WORKING_DIRECTORY=$(pwd)
     fi
 
-    PATH_TO_THE_LIST=$(mktemp)
+    local PATH_TO_THE_FILE_LIST=$(mktemp)
+    local PATH_TO_THE_PROCESS_LIST=$(mktemp)
 
-    create_list ${WORKING_DIRECTORY} ${PATH_TO_THE_LIST}
-    process_list ${PATH_TO_THE_LIST}
-    cleanup ${PATH_TO_THE_LIST}
+    create_file_list ${WORKING_DIRECTORY} ${PATH_TO_THE_FILE_LIST}
+    create_process_list ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST}
+    execute_process_list ${PATH_TO_THE_PROCESS_LIST} ${NUMBER_OF_PARALLEL_PROCESS}
+    cleanup ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST}
 }
 
 basic_example ${@}
