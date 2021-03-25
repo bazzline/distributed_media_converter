@@ -1,6 +1,6 @@
 #!/bin/bash
 ####
-# Basic example to implement conversion of images to webp
+# Basic example to implement conversion of videos to libx265 mkv
 #
 ####
 # @since 2021-03-25

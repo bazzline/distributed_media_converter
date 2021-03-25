@@ -1,6 +1,6 @@
 #!/bin/bash
 ####
-# Basic example to implement conversion of images to webp
+# Core code
 #
 ####
 # @since 2021-02-25
@@ -190,9 +190,6 @@ function _create_process_list ()
         if [[ -f ${FILE_PATH} ]];
         then
             NEW_FILE_PATH=$(create_process_output_file_path "${FILE_PATH}")
-            #${FILE_PATH:0:-4} returns the file path without the dot and the file extension. It is expected that the dot and the
-            #   file extension consumes 4 characters, like >>.jpg<<.
-            NEW_FILE_PATH="${FILE_PATH:0:-4}.webp"
 
             if [[ -f ${NEW_FILE_PATH} ]];
             then
