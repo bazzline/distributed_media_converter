@@ -31,7 +31,7 @@ function create_process_list_entry ()
     local PATH_TO_THE_PROCESS_LIST="${2}"
     local DESTINATION_FILE_PATH="${3}"
 
-    echo "ffmpeg -i \"${FILE_PATH}\" -map 0 -acodec copy -scodec copy -vcodec libx265 -nostats -hide_banner -pass 1 \"${DESTINATION_FILE_PATH}.mkv\"" >> "${PATH_TO_THE_PROCESS_LIST}"
+    echo "ffmpeg -i \"${FILE_PATH}\" -map 0 -acodec copy -scodec copy -vcodec libx265 -nostats -hide_banner -pass 1 \"${DESTINATION_FILE_PATH}\"" >> "${PATH_TO_THE_PROCESS_LIST}"
 }
 
 ####
@@ -41,9 +41,13 @@ function create_process_output_file_path ()
 {
     local FILE_PATH="${1}"
 
+    #future state
     #${FILE_PATH:0:-4} returns the file path without the dot and the file extension. It is expected that the dot and the
-    #   file extension consumes 4 characters, like >>.jpg<<.
-    NEW_FILE_PATH="${FILE_PATH:0:-4}.mkv"
+    #   file extension consumes 4 characters, like >>.mp4<<.
+    #NEW_FILE_PATH="${FILE_PATH:0:-4}.converted265.mkv"
+
+    #current state, just add >>.converted265.mkv<<
+    NEW_FILE_PATH="${FILE_PATH}.converted265.mkv"
 
     echo "${NEW_FILE_PATH}"
 }
