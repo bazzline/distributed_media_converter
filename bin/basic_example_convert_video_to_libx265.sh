@@ -31,7 +31,7 @@ function create_process_list_entry ()
     local PATH_TO_THE_PROCESS_LIST="${2}"
     local DESTINATION_FILE_PATH="${3}"
 
-    echo "ffmpeg -i \"${FILE_PATH}\" -map 0 -acodec copy -scodec copy -vcodec libx265 -nostats -hide_banner -pass 1 \"${FILE_PATH:0:-4}.mkv\"" >> "${PATH_TO_THE_PROCESS_LIST}"
+    echo "ffmpeg -i \"${FILE_PATH}\" -map 0 -acodec copy -scodec copy -vcodec libx265 -nostats -hide_banner -pass 1 \"${DESTINATION_FILE_PATH}.mkv\"" >> "${PATH_TO_THE_PROCESS_LIST}"
 }
 
 ####
@@ -57,7 +57,9 @@ function fill_file_list ()
     local WORKING_DIRECTORY="${1}"
     local PATH_TO_THE_FILE_LIST="${2}"
 
-    find "${WORKING_DIRECTORY}" -iname "*.[mM][pP]4" -type f > "${PATH_TO_THE_FILE_LIST}"
+    echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[mM][oO]vV]\" -type f >> \"${PATH_TO_THE_FILE_LIST}\""
+
+    find "${WORKING_DIRECTORY}" -iname "*.[mM][pP]4" -type f >> "${PATH_TO_THE_FILE_LIST}"
     find "${WORKING_DIRECTORY}" -iname "*.[aA][vV][iI]" -type f >> "${PATH_TO_THE_FILE_LIST}"
     find "${WORKING_DIRECTORY}" -iname "*.[mM][oO]vV]" -type f >> "${PATH_TO_THE_FILE_LIST}"
     find "${WORKING_DIRECTORY}" -iname "*.[fF][lL]vV]" -type f >> "${PATH_TO_THE_FILE_LIST}"
