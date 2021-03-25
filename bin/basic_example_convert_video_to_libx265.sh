@@ -57,12 +57,10 @@ function fill_file_list ()
     local WORKING_DIRECTORY="${1}"
     local PATH_TO_THE_FILE_LIST="${2}"
 
-    echo "find \"${WORKING_DIRECTORY}\" -iname \"*.[mM][oO]vV]\" -type f >> \"${PATH_TO_THE_FILE_LIST}\""
-
     find "${WORKING_DIRECTORY}" -iname "*.[mM][pP]4" -type f >> "${PATH_TO_THE_FILE_LIST}"
     find "${WORKING_DIRECTORY}" -iname "*.[aA][vV][iI]" -type f >> "${PATH_TO_THE_FILE_LIST}"
-    find "${WORKING_DIRECTORY}" -iname "*.[mM][oO]vV]" -type f >> "${PATH_TO_THE_FILE_LIST}"
-    find "${WORKING_DIRECTORY}" -iname "*.[fF][lL]vV]" -type f >> "${PATH_TO_THE_FILE_LIST}"
+    find "${WORKING_DIRECTORY}" -iname "*.[mM][oO][vV]" -type f >> "${PATH_TO_THE_FILE_LIST}"
+    find "${WORKING_DIRECTORY}" -iname "*.[fF][lL][vV]" -type f >> "${PATH_TO_THE_FILE_LIST}"
 }
 
 start_main ${@}
