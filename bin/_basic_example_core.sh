@@ -199,7 +199,7 @@ function _create_process_list ()
                 echo "   Skipping file path."
                 echo "   >>${NEW_FILE_PATH}<< exists already."
             else
-                create_process_list_entry "${FILE_PATH}" "${PATH_TO_THE_PROCESS_LIST}"
+                create_process_list_entry "${FILE_PATH}" "${PATH_TO_THE_PROCESS_LIST}" "${NEW_FILE_PATH}"
 
                 NUMBER_OF_CREATED_ENTRIES=$((NUMBER_OF_CREATED_ENTRIES+1))
             fi
