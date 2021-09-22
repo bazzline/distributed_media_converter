@@ -11,6 +11,7 @@ We will put it to `/srv/webapps/net_bazzline/distributed_media_converter".
 
 ## General
 
+It looks like it is not possible to [resume](https://video.stackexchange.com/questions/32342/how-can-one-resume-an-interrupted-ffmpeg-job-or-pause-by-design-and-save-some-ki) an interrupted ffmpeg-job. We could run the stuff in a vm and pause the vm or split a video into segments and glue the converted segments together.
 To get things moving, we won't use a database.
 The broker just moves files into dedicated paths.
 We also won't use a database, the broker is single threaded so it will use a basic json file to keep things up to date.
