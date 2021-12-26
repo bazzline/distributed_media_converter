@@ -12,22 +12,25 @@
 # Askes the user if the process list file should be removed
 ####
 # @param: <string> PATH_TO_THE_FILE_LIST
+# @param: <string> PATH_TO_THE_PROCESS_LIST
+# @param: <string> WORKING_DIRECTORY
 ####
 # @since 2021-02-25
 # @author stev leibelt <artodeto@bazzline.net>
 ####
 function _cleanup ()
 {
-    if [[ $# -lt 1 ]];
+    if [[ $# -lt 2 ]];
     then
         echo ":: Invalid amount of arguments provided!"
-        echo "   _cleanup <string: PATH_TO_THE_FILE_LIST> <string: PATH_TO_THE_PROCESS_LIST>"
+        echo "   _cleanup <string: PATH_TO_THE_FILE_LIST> <string: PATH_TO_THE_PROCESS_LIST> <string: WORKING_DIRECTORY>"
 
         return 1
     fi
 
     local PATH_TO_THE_FILE_LIST="${1}"
     local PATH_TO_THE_PROCESS_LIST="${2}"
+    local WORKING_DIRECTORY="${3}"
 
     if [[ ! -f "${PATH_TO_THE_FILE_LIST}" ]];
     then
@@ -45,11 +48,28 @@ function _cleanup ()
         return 2
     fi
 
+    if [[ ! -d "${WORKING_DIRECTORY}" ]];
+    then
+        echo ":: Invalid working directory provieded!"
+        echo "   >>${WORKING_DIRECTORY}<< is not a directory."
+
+        return 2
+    fi
+
     local NUMBER_OF_FILE_LIST_ENTRIES=$(cat "${PATH_TO_THE_FILE_LIST}" | wc -l)
     local NUMBER_OF_PROCESS_LIST_ENTRIES=$(cat "${PATH_TO_THE_PROCESS_LIST}" | wc -l)
+    local PATH_TO_THE_FFMPEG_LOG="${WORKING_DIRECTORY}/ffmpeg2pass-0.log"
 
     echo ":: The file list >>${PATH_TO_THE_FILE_LIST}<< contains >>${NUMBER_OF_FILE_LIST_ENTRIES}<<."
     echo ":: The process list >>${PATH_TO_THE_PROCESS_LIST}<< contains >>${NUMBER_OF_PROCESS_LIST_ENTRIES}<<."
+
+    if [[ -f ${PATH_TO_THE_FFMPEG_LOG} ]];
+    then
+        rm "${PATH_TO_THE_FFMPEG_LOG}"
+    else
+        echo ":: Can not remove the ffmpeg log file."
+        echo "   >>${PATH_TO_THE_FFMPEG_LOG}<< is not a file."
+    fi
 
     read -p ":: Remove each file from the file list? [N/y]" YES_OR_NO
 
@@ -99,7 +119,7 @@ function _cleanup ()
 ####
 # Creates a file list containing all jpg or png files.
 ####
-# [@param: <string> WORKING_DIRECTRY]
+# [@param: <string> WORKING_DIRECTORY]
 # [@param: <string> PATH_TO_THE_FILE_LIST]
 ####
 # @since 2021-02-25
@@ -310,7 +330,7 @@ function start_main()
     _create_file_list ${WORKING_DIRECTORY} ${PATH_TO_THE_FILE_LIST}
     _create_process_list ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST}
     _execute_process_list ${PATH_TO_THE_PROCESS_LIST} ${NUMBER_OF_PARALLEL_PROCESS}
-    _cleanup ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST}
+    _cleanup ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST} ${WORKING_DIRECTORY}
 }
 
 #start_main ${@}
