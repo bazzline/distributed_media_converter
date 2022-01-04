@@ -324,11 +324,16 @@ function start_main()
 
     if [[ ${USER_INPUT_SHOW_HELP} -eq 1 ]];
     then
+        local CURRENT_SCRIPT_NAME=$(basename $0)
+
         echo ":: Usage"
-        echo "   <command> [-h|--help] [-p|--number-of-parallel-process <int>] [<string: working directory>]"
+        echo "   ${CURRENT_SCRIPT_NAME} [-h|--help] [-p|--number-of-parallel-process <int>] [<string: working directory>]"
+
+        return 0
     fi
 
     if [[ ! -f /usr/bin/parallel ]];
+    then
         USER_INPUT_NUMBER_OF_PARALLEL_PROCESS=1
 
         echo ":: Parallel is not installed."
