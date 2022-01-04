@@ -292,7 +292,6 @@ function fill_file_list ()
 
 ####
 # [@param: <string> WORKING_DIRECTORY=.]
-# [@param: <int> NUMBER_OF_PARALLEL_PROCESS=2]
 ####
 function start_main()
 {
@@ -302,11 +301,35 @@ function start_main()
         echo "   Could not find directory >>/usr/include/webp<<"
     fi
 
-    if [[ -f /usr/bin/parallel ]];
+    local USER_INPUT_NUMBER_OF_PARALLEL_PROCESS=1
+    local USER_INPUT_SHOW_HELP=0
+    local USER_INPUT_WORKING_DIRECTORY=$(pwd)
+
+    while true;
+    do
+        case "${1}" in
+            "-h" | "--help")
+                USER_INPUT_SHOW_HELP=1
+                shift 1
+                ;;
+            "-p" | "--number-of-parallel-process")
+                USER_INPUT_NUMBER_OF_PARALLEL_PROCESS="${2}"
+                shift 2
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    if [[ ${USER_INPUT_SHOW_HELP} -eq 1 ]];
     then
-        local NUMBER_OF_PARALLEL_PROCESS=${2:-2}
-    else
-        local NUMBER_OF_PARALLEL_PROCESS=1
+        echo ":: Usage"
+        echo "   <command> [-h|--help] [-p|--number-of-parallel-process <int>] [<string: working directory>]"
+    fi
+
+    if [[ ! -f /usr/bin/parallel ]];
+        USER_INPUT_NUMBER_OF_PARALLEL_PROCESS=1
 
         echo ":: Parallel is not installed."
         echo "   >>/usr/bin/parallel<< is missing."
@@ -315,22 +338,20 @@ function start_main()
 
     if [[ $# -gt 0 ]];
     then
-        local WORKING_DIRECTORY="${1}"
-    else
-        local WORKING_DIRECTORY=$(pwd)
+        USER_INPUT_WORKING_DIRECTORY="${1}"
     fi
 
     echo ":: Using following dynamic values."
-    echo "   Working directory >>${WORKING_DIRECTORY}<<."
-    echo "   Number of parallel process >>${NUMBER_OF_PARALLEL_PROCESS}<<."
+    echo "   Working directory >>${USER_INPUT_WORKING_DIRECTORY}<<."
+    echo "   Number of parallel process >>${USER_INPUT_NUMBER_OF_PARALLEL_PROCESS}<<."
 
     local PATH_TO_THE_FILE_LIST=$(mktemp)
     local PATH_TO_THE_PROCESS_LIST=$(mktemp)
 
-    _create_file_list ${WORKING_DIRECTORY} ${PATH_TO_THE_FILE_LIST}
+    _create_file_list ${USER_INPUT_WORKING_DIRECTORY} ${PATH_TO_THE_FILE_LIST}
     _create_process_list ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST}
-    _execute_process_list ${PATH_TO_THE_PROCESS_LIST} ${NUMBER_OF_PARALLEL_PROCESS}
-    _cleanup ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST} ${WORKING_DIRECTORY}
+    _execute_process_list ${PATH_TO_THE_PROCESS_LIST} ${USER_INPUT_NUMBER_OF_PARALLEL_PROCESS}
+    _cleanup ${PATH_TO_THE_FILE_LIST} ${PATH_TO_THE_PROCESS_LIST} ${USER_INPUT_WORKING_DIRECTORY}
 }
 
 #start_main ${@}
