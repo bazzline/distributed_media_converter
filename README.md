@@ -17,6 +17,8 @@ The broker just moves files into dedicated paths.
 We also won't use a database, the broker is single threaded so it will use a basic json file to keep things up to date.
 Server can also reject an item (disk full, not supported conversion)
 
+What about using [rqlite](https://www.phoronix.com/scan.php?page=news_item&px=Rqlite-7.0-Released) as database?
+
 ## Client item database
 
 ```json
