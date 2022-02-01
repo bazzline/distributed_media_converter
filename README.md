@@ -17,6 +17,20 @@ The broker just moves files into dedicated paths.
 We also won't use a database, the broker is single threaded so it will use a basic json file to keep things up to date.
 Server can also reject an item (disk full, not supported conversion)
 
+### Database
+
+#### items
+
+| uuid | file_name | file_path | file_size_in_kb | sha512_checksum | created_at | updated_at |
+| --- | --- | --- |-----------------|-----------------| --- | --- |
+| aklsjdksad-asd223-... | my_movie.mkv | media/video | 229703750 | d6998200... | 1643645789 | 1643745789 |
+
+#### to_do
+
+| uuid | items_uudi | client_id | conversion_type | created_at | updated_at |
+| --- | --- | --- | --- | --- | --- |
+| 39aisd-... | aklsjdksad-... | 1 | x256 | 1643645989 | |
+
 What about using [rqlite](https://www.phoronix.com/scan.php?page=news_item&px=Rqlite-7.0-Released) as database?
 
 ## Client item database
