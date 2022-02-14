@@ -31,7 +31,7 @@ Server can also reject an item (disk full, not supported conversion)
 | --- | --- | --- | --- | --- | --- |
 | 39aisd-... | aklsjdksad-... | 1 | x256 | 1643645989 | |
 
-What about using [rqlite](https://www.phoronix.com/scan.php?page=news_item&px=Rqlite-7.0-Released) as database?
+What about using [rqlite](https://www.phoronix.com/scan.php?page=news_item&px=Rqlite-7.0-Released) as database? Or [etcd](https://hub.packtpub.com/getting-started-etcd/)
 
 ## Client item database
 
