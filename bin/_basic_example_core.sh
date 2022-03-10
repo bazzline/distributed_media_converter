@@ -71,7 +71,7 @@ function _cleanup ()
         echo "   >>${PATH_TO_THE_FFMPEG_LOG}<< is not a file."
     fi
 
-    read -p ":: Remove each file from the file list? [N/y]" YES_OR_NO
+    read -p ":: Remove each file from the file list? [N/y] " YES_OR_NO
 
     case ${YES_OR_NO} in
         [Yy]* )
@@ -81,7 +81,7 @@ function _cleanup ()
             ;;
     esac
 
-    read -p ":: Remove the lists? [Y/n]" YES_OR_NO
+    read -p ":: Remove the lists? [Y/n] " YES_OR_NO
 
     case ${YES_OR_NO} in
         [Nn]* )
@@ -100,6 +100,11 @@ function _cleanup ()
             if [[ -f "${FILE_PATH}" ]];
             then
                 rm "${FILE_PATH}"
+
+                if [[ ${?} -gt 0 ]];
+                then
+                    echo "   Could not remove file path >>${FILE_PATH}<<. Last rm return code was >>${?}<<."
+                fi
             else
                 echo "   Skipping invalid file path."
                 echo "   >>${FILE_PATH}<<"
