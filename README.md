@@ -1,5 +1,9 @@
 # distributed_media_converter
 
+# FULL STOP
+
+It looks like [tdarr](https://tdarr.io/) is doing the same and is working already.
+
 Free as in freedom, yet another distributed media converter
 
 This is a simple system to queue in media conversion, e.g. video to mkv, in a network where neither server nor client are always online.
