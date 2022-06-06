@@ -1,6 +1,8 @@
 # distributed_media_converter
 
-# FULL STOP
+Maybe use [cadence](https://opensource.com/article/22/6/cadence-open-source-workflow-engine) as base?
+
+## FULL STOP
 
 It looks like [tdarr](https://tdarr.io/) is doing the same and is working already.
 
